@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Üdv ASP.NET-ben";
+}
+@model IEnumerable<UjGyakorlas.Models.Kiadas>
+
+
+
+<div class="container">
+    <h1 class="text-center">Költségek</h1>
+    <h3>Keresés:</h3>
+    <input type="text" class="form-control mb-4" name="Kereses" id="Kereses" placeholder="Írd ide a keresett költséget." />
+    <script>
+        document.getElementById('Kereses').addEventListener('input', function () {
+            const query = this.value;
+
+            // Küldje el a keresési lekérdezést, még akkor is, ha üres
+            fetch(`/Home/Kereses?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => frissitTabla(data))
+                .catch(error => console.error('Hiba a keresés során:', error));
+        });
+
+        function frissitTabla(data) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.innerHTML = ""; // Tisztítsuk meg a táblázatot
+
+            // Töltsük fel az új eredményeket
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.cim}</td>
+                    <td>${item.osszeg} Ft</td>
+                    <td>${item.tipus}</td>
+                    <td>${item.datum}</td>
+                    <td>
+                        <a href="/Home/KiadasTorles?id=${item.id}">Törlés</a>
+                        <a href="/Home/KiadasModosit?id=${item.id}">Szerkesztés</a>
+                    </td>
+                `;
+                resultsContainer.appendChild(row);
+            });
+        }
+
+
+    </script>
+   
+    <div class="row">
+        <div class="col card">
+            <h2 class="card-header mb-3">Dátum szerint:</h2>
+
+            <div class="card-body">
+             <form asp-action="Szures" method="get">
+                    <label class="form-label" for="fromDate">Kezdő dátum:</label>
+                    <input class="form-control" type="date" name="fromDate" />
+
+                    <label class="form-label" for="toDate">Záró dátum:</label>
+                    <input class="form-control" type="date" name="toDate" />
+
+                    <button class="btn btn-primary my-3" type="submit">Szűrés</button>
+                </form>
+
+                <form  asp-action="SzuresVisszaAllitas" method="get">
+                    <button class="btn btn-warning" type="submit">Visszaállítás</button>
+                </form>
+            </div>
+        </div>
+        <div class="col card">
+            <h2 class="card-header mb-3">Kategória szerint:</h2>
+            <div class="card-body">
+                <form asp-action="KatSzures" method="get">
+                    <label class="form-label" for="KatSzures">Kategória:</label>
+                    <select id="KatSzures" name="Kategoria" class="form-select">
+                        <option value="Élelmiszer">Élelmiszer</option>
+                        <option value="Szórakozás">Szórakozás</option>
+                        <option value="Közlekedés">Közlekedés</option>
+                        <option value="Ruházat">Ruházat</option>
+                        <option value="Nagybevásárlás">Nagybevásárlás</option>
+                        <option value="Egyéb">Egyéb</option>
+                    </select>
+
+                    <button class="btn btn-success my-3" type="submit">Szűrés</button>
+                </form>
+
+                <form asp-action="SzuresVisszaAllitas" method="get">
+                    <button class="btn btn-warning" type="submit">Visszaállítás</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th>Cím</th>
+            <th>Összeg</th>
+            <th>Típus</th>
+            <th>Dátum</th>
+            <th>Műveletek</th>
+        </tr>
+    </thead>
+        <tbody id="resultsContainer">
+
+        @foreach (var kiadas in Model)
+        {
+                    
+
+            <tr>
+                <td>@kiadas.Cim</td>
+                <td>@kiadas.Osszeg Ft</td>
+                <td>@kiadas.Tipus</td>
+                <td>@kiadas.Datum.ToShortDateString()</td>
+                <td>
+                    <a asp-route-id="@kiadas.Id" asp-action="KiadasTorles">Törlés</a>
+                    <a asp-route-id="@kiadas.Id" asp-action="KiadasModosit">Szerkesztés</a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+    <h1>Összes költség: @ViewBag.Osszeg Ft</h1>
+
+</div>

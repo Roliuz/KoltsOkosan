@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Új kiadás";
+}
+
+@model UjGyakorlas.Models.Kiadas //MEG KELL HÍVNI AZ ADATOKAT TÁROLÓ FILET
+
+
+<h1>Új Kiadás Hozzáadása</h1>
+<form asp-action="UjKiadas" method="post" class="form p-4 border rounded shadow-sm">
+    <div class="mb-3">
+        <label for="Cim" class="form-label">Cím:</label>
+        <input type="text" class="form-control" id="Cim" name="Cim" required placeholder="Adja meg a költség címét" />
+    </div>
+    <div class="mb-3">
+        <label for="Osszeg" class="form-label">Összeg:</label>
+        <input type="number" class="form-control" id="Osszeg" name="Osszeg" required placeholder="Adja meg az összeget" />
+    </div>
+    <div class="mb-3">
+        <label for="Tipus" class="form-label">Kategória:</label>
+        <select id="Tipus" name="Tipus" class="form-select">
+            <option value="Élelmiszer">Élelmiszer</option>
+            <option value="Szórakozás">Szórakozás</option>
+            <option value="Közlekedés">Közlekedés</option>
+            <option value="Ruházat">Ruházat</option>
+            <option value="Nagybevásárlás">Nagybevásárlás</option>
+            <option value="Egyéb">Egyéb</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="Datum" class="form-label">Dátum:</label>
+        <input type="date" class="form-control" id="Datum" name="Datum" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Hozzáadás</button>
+</form>
+
+

@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Kiadás módosítása";
+}
+
+@model UjGyakorlas.Models.Kiadas;
+
+<h1>Kiadás módosítása</h1>
+
+<form asp-action="KiadasModosit" >
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Cim"></label>
+        <input asp-for="Cim" class="form-control" />
+        <span asp-validation-for="Cim" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Osszeg"></label>
+        <input asp-for="Osszeg" class="form-control" />
+        <span asp-validation-for="Osszeg" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tipus"></label>
+        <select asp-for="Tipus" class="form-select">
+            <option value="Élelmiszer">Élelmiszer</option>
+            <option value="Szórakozás">Szórakozás</option>
+            <option value="Közlekedés">Közlekedés</option>
+            <option value="Ruházat">Ruházat</option>
+            <option value="Nagybevásárlás">Nagybevásárlás</option>
+            <option value="Egyéb">Egyéb</option>
+        </select>
+        <span asp-validation-for="Tipus" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Datum"></label>
+        <input asp-for="Datum" type="date" class="form-control" />
+        <span asp-validation-for="Datum" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Mentés</button>
+</form>
